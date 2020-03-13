@@ -4,7 +4,9 @@ function exit_with_error() {
     BIGWHITETEXT="\033[1;37m"
     BGRED='\033[41m'
     NORMAL="\033[0m"
+    echo ""
     printf "${BIGWHITETEXT}${BGRED} %s ${NORMAL}" $1;
+    echo ""
     exit 1;
 }
 
