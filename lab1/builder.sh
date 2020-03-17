@@ -5,9 +5,9 @@ function exit_with_error() {
     BGRED='\033[41m'
     NORMAL="\033[0m"
     echo ""
-    printf "${BIGWHITETEXT}${BGRED} %s ${NORMAL}" $1;
+    printf "${BIGWHITETEXT}${BGRED} %s ${NORMAL}" $1
     echo ""
-    exit 1;
+    exit 1
 }
 
 function succeful_message() {
@@ -19,11 +19,12 @@ function succeful_message() {
 }
 
 function handle_SIGNALS() {
-    rm -rf -- $mktemp_name;
+    rm -rf -- $mktemp_name
     exit_with_error "User kill process. Temporary folder was removed."
 }
 
 [ -z "$1" ] && exit_with_error 'First arguments must be src file name'
+# -r еще проверять
 if [ -f "$1" ]; then
   :
 else 
@@ -34,7 +35,7 @@ src_file_name="$1"
 OUTPUT_NAME_REGEX="s/^[[:space:]]*\/\/[[:space:]]*Output[[:space:]]*\([^ ]*\)$/\1/p"
 
 executable_file_name=$(sed -n -e "$OUTPUT_NAME_REGEX" "$src_file_name" | grep -m 1 "")
-if [$executable_file_name == ""] 
+if [ $executable_file_name == "" ];
 then
   exit_with_error "Output name is not found '$src_file_name'."
 fi
@@ -52,9 +53,8 @@ succeful_message "Succeful."
 echo "Build src file..."
 path_to_copy="$mktemp_name/$src_file_name"
 current_path=$(pwd)
-cd "$mktemp_name" \
-  && g++ -o "$executable_file_name" "$src_file_name" \
-  || { exit_with_error "Failed compiling src file."; }
+cd "$mktemp_name"
+g++ -o "$executable_file_name" "$src_file_name" || { exit_with_error "Failed compiling src file."; }
 succeful_message "Succeful."
 
 echo "Move executable file to current path..."
